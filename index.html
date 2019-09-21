@@ -13,7 +13,7 @@
 
       /* DOCREADY -- when the html doc is ready, do this */
       $(document).ready(function(){
-        // $('.timeago').timeago();
+        // $('timeago').timeago();
 
         var totalTweets = 0;  // all tweets - shown and not shown
         var displayedTweets = 0;  // tweets already displayed
@@ -23,27 +23,35 @@
         var $body = $('body');
         // $body.html('');
 
-        // populates the initial page with all the current tweets in home
-        var index = streams.home.length - 1;
-        while(index >= 0){  // starts at the latest tweet
-          var tweet = streams.home[index];
-          var $tweet = $("<div class='tweet'></div>");
-          var time = $.timeago(tweet.created_at);
-          $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='time'>" + time + "</div>"); // print tweet
-          $tweet.appendTo($body);  // append this tweet because it starts from the newest
-          index -= 1;
-          displayedTweets++;  // increase the number of displayed tweets once it's posted
+        var index = 0;
+        var initialTweets = function() {
+          while(index <= streams.home.length - 1){
+            var tweet = streams.home[index];
+            var $tweet = $("<div></div>");
+            // var time = $.timeago(tweet.created_at);
+            $tweet.addClass("card");
+
+            $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='timeago time'>" + tweet.created_at.toLocaleTimeString() + "</div>"); // print tweet
+            $tweet.prependTo($tweetCont);
+            index ++;
+            displayedTweets++;  // increase the number of displayed tweets once it's posted
+          }
         }
+        initialTweets();
 
         // after checking the queue, prepend new tweets
         var postNewTweets = function() {
+          //var bookmark = index + 1;
+
           while (newTweets > 0) {
-            var tweet = streams.home[newTweets];
-            var $tweet = $("<div class='tweet'></div");
-            var time = $.timeago(tweet.created_at)
-            $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='time'>" + time + "</div>"); // print tweet
-            $tweet.prependTo($body).hide().fadeIn();
+
+            var tweet = streams.home[index];
+            var $tweet = $("<div></div>");
+            // var time = $.timeago(tweet.created_at);  // refs the tweet creation time from the data_generator.js file
+            $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='timeago time'>" + tweet.created_at.toLocaleTimeString() + "</div>"); // print tweet
+            $tweet.prependTo($tweetCont).hide().fadeIn();
             displayedTweets++;
+            index++;
             newTweets--;
           }
 
@@ -60,8 +68,29 @@
         }
         checkQueue();
 
+        // updateTimeStamp();
+        // setInterval(updateTimeStamp, 60000);
+        // function updateTimeStamp() {
+        //     // Update the text with the elapsed time:
+        //     //var timeAgo = jQuery.timeago(SPECIFICTWEETTIME);
+        //     //$('time.timeago').text(timeAgo);
+        //     var timeAgo = jQuery.timeago(streams.home)
+        //     $('.time').text(timeAgo);
+        // }
+
       });
 
     </script>
+
+    <div id="main"> <!-- main container -->
+      <div id="twitter_border"> <!-- contains the logo and New Tweets button -->
+        <div id="logo">Twiddler</div>
+        <div id="queue_banner"> <!-- area where refresh button is -->
+          <h2 id="new_tweets"></h2> <!-- button to show new tweets -->
+        </div>
+
+        <div id="tweet_container"></div> <!-- container for all the tweets -->
+      </div>
+    </div>
   </body>
 </html>
