@@ -1,7 +1,14 @@
 body {
-    background: #1DA1F2
+    background: #1DA1F2;
+    font-family: 'Roboto', 'Arial', sans-serif;
 }
 
 .user {
     font-weight: bold;
+    font-size: 16px;
+}
+
+.time {
+    font-style: italic;
+    font-size: 15px;
 }
