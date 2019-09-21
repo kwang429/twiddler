@@ -1,5 +1,5 @@
 body {
-    background: #1DA1F2;
+    background: #55ACEE;
     font-family: 'Roboto', 'Arial', sans-serif;
 }
 
@@ -11,4 +11,24 @@ body {
 .time {
     font-style: italic;
     font-size: 15px;
+    color: rgb(29, 40, 47);
+}
+
+#refresh_button {
+    font-weight: bold;
+    font-size: 20px;
+    color: white;
+    cursor: pointer;
+}
+
+#logo {
+    text-align: center;
+    font-weight: bold;
+    font-size: 75px;
+    color: white;
+    
+}
+
+#tweet_container {
+    background: grey;
 }
