@@ -3,26 +3,33 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
+    <script src="timeago.js"></script>  <!-- source code from timeago.yarp.com-->
+
     <link href="style.css" rel="stylesheet"></script>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300i,400,500&display=swap" rel="stylesheet">
   </head>
   <body>
     <script>
 
       /* DOCREADY -- when the html doc is ready, do this */
       $(document).ready(function(){
+        // $('.timeago').timeago();
+
         var totalTweets = 0;  // all tweets - shown and not shown
         var displayedTweets = 0;  // tweets already displayed
         var newTweets = 0;  // new tweets that have not been prepended yet
 
+        var $tweetCont = $('#tweet_container');
         var $body = $('body');
-        $body.html('');
+        // $body.html('');
 
         // populates the initial page with all the current tweets in home
         var index = streams.home.length - 1;
         while(index >= 0){  // starts at the latest tweet
           var tweet = streams.home[index];
           var $tweet = $("<div class='tweet'></div>");
-          $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message); // print tweet
+          var time = $.timeago(tweet.created_at);
+          $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='time'>" + time + "</div>"); // print tweet
           $tweet.appendTo($body);  // append this tweet because it starts from the newest
           index -= 1;
           displayedTweets++;  // increase the number of displayed tweets once it's posted
@@ -33,7 +40,8 @@
           while (newTweets > 0) {
             var tweet = streams.home[newTweets];
             var $tweet = $("<div class='tweet'></div");
-            $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message); // print tweet
+            var time = $.timeago(tweet.created_at)
+            $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='time'>" + time + "</div>"); // print tweet
             $tweet.prependTo($body).hide().fadeIn();
             displayedTweets++;
             newTweets--;
