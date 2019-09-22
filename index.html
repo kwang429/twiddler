@@ -27,25 +27,22 @@
         $("#new_tweets").on("click", postNewTweets);
 
         var index = 0;
-        var initialTweets = function() {
-          while(index <= streams.home.length - 1){
-            var tweet = streams.home[index];
-            var $tweet = $("<div></div>");
-            // var time = $.timeago(tweet.created_at);
-            var tweetTime = tweet.created_at.toLocaleTimeString();
-            $tweet.addClass("card");
+        while(index <= streams.home.length - 1){
+          var tweet = streams.home[index];
+          var $tweet = $("<div></div>");
+          // var time = $.timeago(tweet.created_at);
+          var tweetTime = tweet.created_at.toLocaleTimeString();
+          $tweet.addClass("card");
 
-            $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='timeago time'>" + tweetTime + "</div>"); // print tweet
-            $tweet.prependTo($tweetCont);
-            index ++;
-            displayedTweets++;  // increase the number of displayed tweets once it's posted
-          }
+          $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='timeago time'>" + tweetTime + "</div>"); // print tweet
+          $tweet.prependTo($tweetCont);
+          index ++;
+          displayedTweets++;  // increase the number of displayed tweets once it's posted
         }
-        initialTweets();
 
         function showBanner() {
           if (newTweets >= 1) {
-            $("new_tweets").fadeIn().text(newTweets + " New Tweets!");
+            $("#new_tweets").fadeIn().text(newTweets + " New Tweets!");
           } else {
             $("#new_tweets").text("Your tweets are up to date!");
           }
@@ -55,11 +52,9 @@
         showBanner();
 
         // after checking the queue, prepend new tweets
-        var postNewTweets = function() {
-          //var bookmark = index + 1;
+        function postNewTweets() {
 
           while (newTweets > 0) {
-
             var tweet = streams.home[index];
             var $tweet = $("<div></div>");
             $tweet.addClass("card");
@@ -70,8 +65,6 @@
             index++;
             newTweets--;
           }
-
-          setTimeout(postNewTweets, 10000);
         }
 
         // check if there's new tweets every x seconds
@@ -79,7 +72,7 @@
           totalTweets = streams.home.length;
           newTweets = totalTweets - displayedTweets;
 
-          setTimeout(checkQueue, 3000);
+          setTimeout(checkQueue, 1500);
         }
         checkQueue();
 
