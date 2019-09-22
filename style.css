@@ -1,34 +1,58 @@
-body {
+body,
+#logo {
     background: #55ACEE;
     font-family: 'Roboto', 'Arial', sans-serif;
+    text-align: center;
+}
+
+#logo {
+    font-weight: bold;
+    font-size: 75px;
+    color: white;
+    padding-bottom: 20px;
+}
+
+#tweet_container {
+    width: 75%;
+    height: 80%;
+    display: inline-block;
+}
+
+#queue_banner {
+    background: #FFF3B2;
+    border-radius: 25px;
+    width: 25%;
+    display: inline-block;
+    text-align: center;
+    padding: 15px;
+}
+
+#new_tweets {
+    margin: 0px;
+    text-align: center;
+    color: #3d535c;
+    font-size: 20px;
+    cursor: pointer;
 }
 
 .user {
     font-weight: bold;
     font-size: 16px;
+    padding-bottom: 7px;
 }
 
 .time {
     font-style: italic;
     font-size: 15px;
     color: rgb(29, 40, 47);
+    text-align: right;
 }
 
-#refresh_button {
-    font-weight: bold;
-    font-size: 20px;
-    color: white;
-    cursor: pointer;
-}
-
-#logo {
-    text-align: center;
-    font-weight: bold;
-    font-size: 75px;
-    color: white;
-    
-}
-
-#tweet_container {
-    background: grey;
+.card {
+    padding: 10px;
+    border-radius: 25px;
+    border: 1.5px solid black;
+    text-align: left;
+    margin: 10px;
+    background: white;
 }

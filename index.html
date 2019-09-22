@@ -23,21 +23,36 @@
         var $body = $('body');
         // $body.html('');
 
+        // click on banner to refresh and show new tweets
+        $("#new_tweets").on("click", postNewTweets);
+
         var index = 0;
         var initialTweets = function() {
           while(index <= streams.home.length - 1){
             var tweet = streams.home[index];
             var $tweet = $("<div></div>");
             // var time = $.timeago(tweet.created_at);
+            var tweetTime = tweet.created_at.toLocaleTimeString();
             $tweet.addClass("card");
 
-            $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='timeago time'>" + tweet.created_at.toLocaleTimeString() + "</div>"); // print tweet
+            $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='timeago time'>" + tweetTime + "</div>"); // print tweet
             $tweet.prependTo($tweetCont);
             index ++;
             displayedTweets++;  // increase the number of displayed tweets once it's posted
           }
         }
         initialTweets();
+
+        function showBanner() {
+          if (newTweets >= 1) {
+            $("new_tweets").fadeIn().text(newTweets + " New Tweets!");
+          } else {
+            $("#new_tweets").text("Your tweets are up to date!");
+          }
+
+          setTimeout(showBanner, 100);
+        }
+        showBanner();
 
         // after checking the queue, prepend new tweets
         var postNewTweets = function() {
@@ -47,6 +62,7 @@
 
             var tweet = streams.home[index];
             var $tweet = $("<div></div>");
+            $tweet.addClass("card");
             // var time = $.timeago(tweet.created_at);  // refs the tweet creation time from the data_generator.js file
             $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='timeago time'>" + tweet.created_at.toLocaleTimeString() + "</div>"); // print tweet
             $tweet.prependTo($tweetCont).hide().fadeIn();
@@ -57,7 +73,6 @@
 
           setTimeout(postNewTweets, 10000);
         }
-        postNewTweets();
 
         // check if there's new tweets every x seconds
         var checkQueue = function() {
@@ -82,14 +97,18 @@
 
     </script>
 
-    <div id="main"> <!-- main container -->
-      <div id="twitter_border"> <!-- contains the logo and New Tweets button -->
+    <!-- main container -->
+    <div id="main"> 
+      <!-- contains the logo and New Tweets button -->
+      <div id="twitter_border"> 
         <div id="logo">Twiddler</div>
-        <div id="queue_banner"> <!-- area where refresh button is -->
-          <h2 id="new_tweets"></h2> <!-- button to show new tweets -->
+        <!-- area where refresh button is -->
+        <div id="queue_banner"> 
+          <!-- button to show new tweets -->
+          <h2 id="new_tweets"></h2> 
         </div>
-
-        <div id="tweet_container"></div> <!-- container for all the tweets -->
+        <!-- container for all the tweets -->
+        <div id="tweet_container"></div> 
       </div>
     </div>
   </body>
