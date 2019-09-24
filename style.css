@@ -34,6 +34,7 @@ body,
     padding: 5px;
 }
 
+#home_button,
 #refresh_tweets {
     text-align: center;
     color: #3d535c;

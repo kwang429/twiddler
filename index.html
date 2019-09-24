@@ -104,8 +104,20 @@
             $tweet.html("<div class='user'>" + "@" + username + "</div>" + userTweet + "<div class='time'>" + userTime + "</div>");
             $tweet.prependTo($("#user_timeline"));
             $("#refresh_tweets").hide();
+            $("#home_button").show().text("Back");
           }
 
+        }
+
+        $("#home_button").on("click", backHome);
+
+        function backHome() {
+          $("#user_timeline").fadeOut();
+          $("#tweet_container").hide().fadeIn();
+          $("#home_button").hide();
+          $("#refresh_tweets").css({cursor: "pointer"});
+          $("#refresh_tweets").show().on("click", postNewTweets);
+          postNewTweets();
         }
 
       });
