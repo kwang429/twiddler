@@ -3,28 +3,26 @@
   <head>
     <script src="jquery.js"></script>
     <script src="data_generator.js"></script>
-    <script src="timeago.js"></script>  <!-- source code from timeago.yarp.com-->
-
-    <link href="style.css" rel="stylesheet"></script>
+    <!-- <script src="timeago.js"></script> -->
+    <link href="style.css" rel="stylesheet" type="text/css"></script>
     <link href="https://fonts.googleapis.com/css?family=Roboto:300i,400,500&display=swap" rel="stylesheet">
   </head>
   <body>
     <script>
+      var totalTweets = 0;  // all tweets - shown and not shown
+      var displayedTweets = 0;  // tweets already displayed
+      var newTweets = 0;  // new tweets that have not been prepended yet
 
       /* DOCREADY -- when the html doc is ready, do this */
       $(document).ready(function(){
         // $('timeago').timeago();
-
-        var totalTweets = 0;  // all tweets - shown and not shown
-        var displayedTweets = 0;  // tweets already displayed
-        var newTweets = 0;  // new tweets that have not been prepended yet
 
         var $tweetCont = $('#tweet_container');
         var $body = $('body');
         // $body.html('');
 
         // click on banner to refresh and show new tweets
-        $("#new_tweets").on("click", postNewTweets);
+        $("#refresh_tweets").on("click", postNewTweets);
 
         var index = 0;
         while(index <= streams.home.length - 1){
@@ -34,7 +32,7 @@
           var tweetTime = tweet.created_at.toLocaleTimeString();
           $tweet.addClass("card");
 
-          $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='timeago time'>" + tweetTime + "</div>"); // print tweet
+          $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='time'>" + tweetTime + "</div>"); // print tweet
           $tweet.prependTo($tweetCont);
           index ++;
           displayedTweets++;  // increase the number of displayed tweets once it's posted
@@ -42,9 +40,9 @@
 
         function showBanner() {
           if (newTweets >= 1) {
-            $("#new_tweets").fadeIn().text(newTweets + " New Tweets!");
+            $("#refresh_tweets").fadeIn().text(newTweets + " New Tweets!");
           } else {
-            $("#new_tweets").text("Your tweets are up to date!");
+            $("#refresh_tweets").text("Your tweets are up to date!");
           }
 
           setTimeout(showBanner, 100);
@@ -57,9 +55,10 @@
           while (newTweets > 0) {
             var tweet = streams.home[index];
             var $tweet = $("<div></div>");
+            var tweetTime = tweet.created_at.toLocaleTimeString();
             $tweet.addClass("card");
             // var time = $.timeago(tweet.created_at);  // refs the tweet creation time from the data_generator.js file
-            $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='timeago time'>" + tweet.created_at.toLocaleTimeString() + "</div>"); // print tweet
+            $tweet.html("<div class='user'>" + '@' + tweet.user + "</div>" + tweet.message + "<div class='time'>" + tweetTime + "</div>"); // print tweet
             $tweet.prependTo($tweetCont).hide().fadeIn();
             displayedTweets++;
             index++;
@@ -86,22 +85,48 @@
         //     $('.time').text(timeAgo);
         // }
 
+        //});
+
+        $(".user").on("click", showUserHist);
+
+        function showUserHist() {
+          var userToText = $(this).text();
+          var username = userToText.slice(1);
+          $tweetCont.fadeOut();
+          $("#user_timeline").hide().fadeIn();
+          $("#refresh_tweets").off('click').css({'cursor' :"default"});
+
+          for (var i = 0; i < streams.users[username].length; i++) {
+            var $tweet = $("<div></div>");
+            var userTweet = streams.users[username][i].message;
+            var userTime = streams.users[username][i].created_at.toLocaleTimeString();
+            $tweet.addClass("card");
+            $tweet.html("<div class='user'>" + "@" + username + "</div>" + userTweet + "<div class='time'>" + userTime + "</div>");
+            $tweet.prependTo($("#user_timeline"));
+            $("#refresh_tweets").hide();
+          }
+
+        }
+
       });
 
-    </script>
-
-    <!-- main container -->
-    <div id="main"> 
-      <!-- contains the logo and New Tweets button -->
-      <div id="twitter_border"> 
-        <div id="logo">Twiddler</div>
-        <!-- area where refresh button is -->
-        <div id="queue_banner"> 
-          <!-- button to show new tweets -->
-          <h2 id="new_tweets"></h2> 
-        </div>
-        <!-- container for all the tweets -->
-        <div id="tweet_container"></div> 
+    </script><!--
+      main container
+  --><div id="main"><!--
+      contains the logo and New Tweets button
+    --><div id="twitter_border"> 
+        <div id="logo">Twiddler</div><!--
+          area where refresh button is
+        --><div id="queue_banner"><!--
+          button to show new tweets 
+        --><h2 id="refresh_tweets"></h2><!--
+          button to go back to the main page after going to user timeline
+        --><h2 id="home_button"></h2>
+        </div><!--
+          container for all the tweets
+        --><div id="tweet_container"></div><!--
+          container for the user timeline
+        --><div id="user_timeline"></div>
       </div>
     </div>
   </body>
